@@ -39,6 +39,27 @@ public class Node {
    */
   public Node(List<Integer> list) {
     // TODO: implement this
+    // Check for illegal argument exception
+    if (list.isEmpty() || list.equals(null)) {
+      throw new IllegalArgumentException("Invalid argument, please provide a populated or non-null array.");
+    }
+
+    // Set the value of the 'head' to the first element in the array
+    this.value = list.get(0);
+    Node curr = this;
+    
+    // Iterate the array creating the nodes in chained order
+    for (int i = 1; i < list.size(); i++) {
+      // Create the next node and assign appropriate value
+      curr.next = new Node(list.get(i));
+
+      // Set the previous node
+      curr.next.prev = curr;
+
+      // Mode the current pointer to the next node
+      curr = curr.next;
+    }
+
   }
 
   /**
