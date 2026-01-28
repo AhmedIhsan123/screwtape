@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,6 +71,24 @@ public class Node {
    */
   public List<Integer> toList() {
     // TODO: Implement this
-    return null;
+    // Check for null node calls
+    if (this.equals(null)) {
+      throw new NullPointerException("Node is null, cannot conver to array");
+    }
+
+    // Create a list to store integer values from linked list 
+    List<Integer> list = new ArrayList<>();
+
+    // Pointer variable to traverse linked list
+    Node curr = this;
+
+    // Iterate through the node list adding values to the array
+    while (curr != null) {
+      list.add(curr.value);
+      curr = curr.next;
+    }
+
+    // Return the populate list
+    return list;
   }
 }
