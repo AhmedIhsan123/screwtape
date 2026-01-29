@@ -1,4 +1,7 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -170,6 +173,72 @@ public class ScrewtapeInterpreter {
   public String execute(String program) {
     // TODO: Implement this
     // If you get stuck, you can look at hint.md for a hint
-    return null;
+    // Get map of brackets
+    Map<Integer, Integer> brMap = bracketMap(program);
+
+    // A set of all possible commands
+    // Set<Character> commands = new HashSet<>(Arrays.asList('>', '<', '+', '-', '[', ']', '.'));
+    // Node pHead = tapeHead;
+    StringBuilder output = new StringBuilder();
+
+    for (int i = 0; i < program.length(); i++) {
+      // Store the current character in a variable
+      Character c = program.charAt(i);
+
+      // Switch on the character
+      switch (c) {
+        case '+':
+          tapePointer.value++;
+          break;
+        case '-':
+          tapePointer.value--;
+          break;
+        case '>':
+          // Check if we need to create a new node
+          if (tapePointer.next == null) {
+            // Create a new node if none is found
+            tapePointer.next = new Node(0);
+
+            // Make sure the prev pointer is correct for the new node
+            tapePointer.next.prev = tapePointer;
+
+            // Move tapePointer
+            tapePointer = tapePointer.next;
+          } else {
+            // Move pointer to next node, no need to create a new one
+            tapePointer = tapePointer.next;
+          }
+          break;
+        case '<':
+          // Check if we need to create a new node
+          if (tapePointer.prev == null) {
+            // Create a new node if none is found
+            tapePointer.prev = new Node(0);
+
+            // Make sure the next pointer is correct for the new node
+            tapePointer.prev.next = tapeHead;
+
+            // Move tapePointer and head
+            tapePointer = tapePointer.prev;
+            tapeHead = tapePointer;
+          } else {
+            // Move pointer to previous node, no need to create a new one
+            tapePointer = tapePointer.prev;
+          }
+          break;  
+        case '.':
+          // Cast the value to a character and append it to the output string
+          char asciiChar = (char) tapePointer.value;
+          output.append(asciiChar);
+          break;
+        case ']':
+          // brMap.get(i);
+          if (tapePointer.value != 0) {
+            i = brMap.get(i);
+          }
+          break;
+      }
+    }
+    return output.toString();
   }
 }
